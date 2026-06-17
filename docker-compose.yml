@@ -1,45 +1,47 @@
+version: '3.8'
+
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: vacinacao_db_mysql
+  db:
+    image: postgres:17-alpine
+    container_name: agenda_db
     environment:
-      MYSQL_ROOT_PASSWORD: root123
-      MYSQL_DATABASE: vacinacao_db
+      POSTGRES_DB: agenda
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - agenda_db_data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./sql/dump.sql:/docker-entrypoint-initdb.d/02-dump.sql
+    networks:
+      - agenda_network
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
       timeout: 5s
       retries: 5
-    networks:
-      - vacinacao_network
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: vacinacao_app
-    image: vacinacao_app
+    build: .
+    container_name: agenda_app
     depends_on:
-      mysql:
+      db:
         condition: service_healthy
-    environment:
-      DB_HOST: mysql
-      DB_PORT: 3306
-      DB_USER: root
-      DB_PASSWORD: root123
-      DB_NAME: vacinacao_db
-    networks:
-      - vacinacao_network
     stdin_open: true
     tty: true
+    networks:
+      - agenda_network
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: agenda
+      DB_USER: postgres
+      DB_PASSWORD: postgres
 
 volumes:
-  mysql_data:
+  agenda_db_data:
 
 networks:
-  vacinacao_network:
+  agenda_network:
     driver: bridge

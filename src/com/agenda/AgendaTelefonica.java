@@ -6,9 +6,15 @@ import java.util.List;
 
 // Classe responsável por gerenciar os contatos no banco de dados
 public class AgendaTelefonica {
-    private static final String URL = "jdbc:postgresql://db:5432/agenda";
-    private static final String USER = "postgres";
-    private static final String PASSWORD = "postgres";
+    private static final String DB_HOST = System.getenv("DB_HOST") != null ? System.getenv("DB_HOST") : "localhost";
+    private static final String DB_PORT = System.getenv("DB_PORT") != null ? System.getenv("DB_PORT") : "5432";
+    private static final String DB_NAME = System.getenv("DB_NAME") != null ? System.getenv("DB_NAME") : "agenda";
+    private static final String DB_USER = System.getenv("DB_USER") != null ? System.getenv("DB_USER") : "postgres";
+    private static final String DB_PASSWORD = System.getenv("DB_PASSWORD") != null ? System.getenv("DB_PASSWORD") : "postgres";
+
+    private static final String URL = "jdbc:postgresql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME;
+    private static final String USER = DB_USER;
+    private static final String PASSWORD = DB_PASSWORD;
 
     // Carrega o driver PostgreSQL
     static {

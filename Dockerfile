@@ -1,42 +1,24 @@
+# Stage 1: Build
 FROM maven:3.9-eclipse-temurin-17 AS builder
 
 WORKDIR /app
 
-# Copiar source e pom.xml
-COPY pom.xml ./
+COPY pom.xml .
 COPY src/ ./src/
 
-# Baixar dependências e compilar
 RUN mvn clean package -DskipTests
 
 # Stage 2: Runtime
-FROM eclipse-temurin:17-jre
-
-# Instalar ferramentas necessárias via apt-get
-RUN apt-get update && apt-get install -y \
-    mysql-client \
-    && rm -rf /var/lib/apt/lists/*
+FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-# Copiar arquivos compilados do builder
-COPY --from=builder /app/target/classes ./bin/
+# Copiar classes compiladas
+COPY --from=builder /app/target/classes ./classes/
 COPY --from=builder /app/target/dependency/*.jar ./lib/
 
-# Copiar scripts e SQL
-COPY sql/ ./sql/
-COPY .env ./
-COPY entrypoint.sh ./
+# Classpath com todas as dependências
+ENV CLASSPATH="./classes:./lib/*"
 
-RUN chmod +x entrypoint.sh
-
-ENTRYPOINT ["./entrypoint.sh"]
-
-
-
-# Dar permissão de execução ao entrypoint
-RUN chmod +x entrypoint.sh
-
-# Comando padrão
-ENTRYPOINT ["./entrypoint.sh"]
-
+# Espera banco estar pronto e executa a aplicação
+CMD sh -c 'sleep 10 && java -cp ./classes:./lib/* com.agenda.AgendaTeste'
