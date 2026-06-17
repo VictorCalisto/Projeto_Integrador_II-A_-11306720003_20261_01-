@@ -6,17 +6,17 @@ WORKDIR /app
 COPY pom.xml .
 COPY src/ ./src/
 
-# Compilar e baixar dependências
-RUN mvn clean dependency:copy-dependencies package -DskipTests
+# Compilar e copiar todas as dependências
+RUN mvn clean package dependency:copy-dependencies -DskipTests
 
 # Stage 2: Runtime
 FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-# Copiar classes e dependências do builder
-COPY --from=builder /app/target/classes ./classes/
-COPY --from=builder /app/target/dependency/ ./lib/
+# Copiar todo o target do builder para garantir que tudo está lá
+COPY --from=builder /app/target/classes ./
+COPY --from=builder /app/target/dependency/*.jar ./
 
 # Espera banco estar pronto e executa a aplicação
-CMD sh -c 'sleep 10 && java -cp ./classes:./lib/* com.agenda.AgendaTeste'
+CMD sh -c 'sleep 10 && java -cp /app:/app/* com.agenda.AgendaTeste'
