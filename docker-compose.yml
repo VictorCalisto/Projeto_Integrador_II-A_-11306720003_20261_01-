@@ -1,54 +1,45 @@
-version: '3.8'
-
 services:
-  # Serviço do banco de dados PostgreSQL
-  db:
-    image: postgres:15
-    container_name: agenda_db
+  mysql:
+    image: mysql:8.0
+    container_name: vacinacao_db_mysql
     environment:
-      POSTGRES_DB: agenda
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: vacinacao_db
     ports:
-      - "5432:5432"
+      - "3306:3306"
     volumes:
-      # Volume nomeado para persistência de dados
-      - agenda_db_data:/var/lib/postgresql/data
-      # Scripts SQL para inicialização
-      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql
-      - ./db/dump.sql:/docker-entrypoint-initdb.d/02-dump.sql
-    networks:
-      - agenda_network
+      - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 5s
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - vacinacao_network
 
-  # Serviço da aplicação Java
   app:
-    build: .
-    container_name: agenda_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vacinacao_app
+    image: vacinacao_app
     depends_on:
-      db:
+      mysql:
         condition: service_healthy
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root123
+      DB_NAME: vacinacao_db
+    networks:
+      - vacinacao_network
     stdin_open: true
     tty: true
-    networks:
-      - agenda_network
-    environment:
-      # Variáveis de ambiente para conexão ao banco
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_NAME: agenda
-      DB_USER: postgres
-      DB_PASSWORD: postgres
 
-# Volume para persistência do banco de dados
 volumes:
-  agenda_db_data:
+  mysql_data:
 
-# Network para comunicação entre containers
 networks:
-  agenda_network:
+  vacinacao_network:
     driver: bridge

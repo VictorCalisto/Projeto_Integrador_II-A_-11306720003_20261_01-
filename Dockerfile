@@ -1,24 +1,42 @@
-# Usa imagem do Java 17
-FROM openjdk:17-slim
+FROM maven:3.9-eclipse-temurin-17 AS builder
 
-# Define diretório de trabalho no container
 WORKDIR /app
 
-# Instala Maven
-RUN apt-get update && \
-    apt-get install -y maven && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Copia arquivo pom.xml
-COPY pom.xml .
-
-# Copia código-fonte
+# Copiar source e pom.xml
+COPY pom.xml ./
 COPY src/ ./src/
 
-# Baixa dependências e compila o projeto
+# Baixar dependências e compilar
 RUN mvn clean package -DskipTests
 
-# Define comando padrão para executar a aplicação
-# Aguarda o banco estar disponível antes de rodar
-CMD sleep 5 && java -cp target/classes:target/lib/* com.agenda.AgendaTeste
+# Stage 2: Runtime
+FROM eclipse-temurin:17-jre
+
+# Instalar ferramentas necessárias via apt-get
+RUN apt-get update && apt-get install -y \
+    mysql-client \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copiar arquivos compilados do builder
+COPY --from=builder /app/target/classes ./bin/
+COPY --from=builder /app/target/dependency/*.jar ./lib/
+
+# Copiar scripts e SQL
+COPY sql/ ./sql/
+COPY .env ./
+COPY entrypoint.sh ./
+
+RUN chmod +x entrypoint.sh
+
+ENTRYPOINT ["./entrypoint.sh"]
+
+
+
+# Dar permissão de execução ao entrypoint
+RUN chmod +x entrypoint.sh
+
+# Comando padrão
+ENTRYPOINT ["./entrypoint.sh"]
+
