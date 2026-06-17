@@ -6,17 +6,16 @@ WORKDIR /app
 COPY pom.xml .
 COPY src/ ./src/
 
-# Compilar e copiar todas as dependências
-RUN mvn clean package dependency:copy-dependencies -DskipTests
+# Compilar Fat JAR com maven-shade-plugin
+RUN mvn clean package -DskipTests
 
 # Stage 2: Runtime
 FROM eclipse-temurin:17-jre-alpine
 
 WORKDIR /app
 
-# Copiar todo o target do builder para garantir que tudo está lá
-COPY --from=builder /app/target/classes ./
-COPY --from=builder /app/target/dependency/*.jar ./
+# Copiar Fat JAR do builder
+COPY --from=builder /app/target/agenda-telefonica.jar ./
 
-# Espera banco estar pronto e executa a aplicação
-CMD sh -c 'sleep 10 && java -cp /app:/app/* com.agenda.AgendaTeste'
+# Espera banco estar pronto e executa o Fat JAR
+CMD sh -c 'sleep 10 && java -jar agenda-telefonica.jar'
