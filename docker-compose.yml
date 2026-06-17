@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # Serviço do banco de dados PostgreSQL
+  db:
+    image: postgres:15
+    container_name: agenda_db
+    environment:
+      POSTGRES_DB: agenda
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      # Volume nomeado para persistência de dados
+      - agenda_db_data:/var/lib/postgresql/data
+      # Scripts SQL para inicialização
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./db/dump.sql:/docker-entrypoint-initdb.d/02-dump.sql
+    networks:
+      - agenda_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Serviço da aplicação Java
+  app:
+    build: .
+    container_name: agenda_app
+    depends_on:
+      db:
+        condition: service_healthy
+    stdin_open: true
+    tty: true
+    networks:
+      - agenda_network
+    environment:
+      # Variáveis de ambiente para conexão ao banco
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: agenda
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+
+# Volume para persistência do banco de dados
+volumes:
+  agenda_db_data:
+
+# Network para comunicação entre containers
+networks:
+  agenda_network:
+    driver: bridge
