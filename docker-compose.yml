@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:17-alpine
@@ -24,6 +22,7 @@ services:
 
   app:
     build: .
+    image: agenda-telefonica:latest
     container_name: agenda_app
     depends_on:
       db:
