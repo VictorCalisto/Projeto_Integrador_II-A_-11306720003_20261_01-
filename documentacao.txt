@@ -1,0 +1,131 @@
+PONTIFÍCIA UNIVERSIDADE CATÓLICA DE GOIÁS
+COORDENAÇÃO ENSINO A DISTÂNCIA – CEAD
+ESCOLA POLITÉCNICA E ARTES
+ANÁLISE E DESENVOLVIMENTO DE SISTEMAS EaD
+PROPOSTA DO PROJETO INTEGRADOR II-A
+JOSE RICARDO COSME LÉRIAS RIBEIRO
+GOIÂNIA,
+2026
+SUMÁRIO
+1 OBJETIVO 3
+2 DESENVOLVIMENTO 3
+3 RESULTADOS 3
+3.1 Etapas 3 
+2
+4 CRONOGRAMA 4
+5 CRITÉRIOS PARA A AVALIAÇÃO 5
+6 SUGESTÕES BIBLIOGRÁFICAS 5
+ 
+3
+1 OBJETIVO
+Criar uma aplicação em Java para armazenar e gerenciar contatos telefônicos,
+implementando as funcionalidades de Create (criar), Read (consultar), Update (atualizar) e
+Delete (excluir). A aplicação permitirá que o usuário armazene informações de contatos como
+nome, número de telefone e e-mail, utilizando essas operações básicas em banco de dados. O
+projeto visa aplicar conceitos de orientação a objetos, manipulação de dados e persistência em
+Java.
+2 DESENVOLVIMENTO
+O trabalho envolve a implementação de uma aplicação de Agenda Telefônica em Java. Esta
+aplicação deve permitir que o usuário armazene e gerencie contatos telefônicos, tendo: nome,
+número de telefone e e-mail. Aplicação deve implementar as funcionalidades dos métodos do
+CRUD. CRUD (Create, Read, Update and Delete) é um acrônimo para as quatro operações
+básicas (criação, consulta, atualização e destruição de dados) utilizadas em bases de dados
+relacionais fornecidas aos utilizadores do sistema. Sendo assim, conforme apresentado, a
+aplicação permitirá salvar, ler, atualizar e excluir dados no banco de dados.
+A escolha do SGDB pode ser realizada entre MySql e PostgreSql. Atente-se para não deixar
+de submeter o banco de dados exportado no entregável.
+
+3 RESULTADOS
+O entregável desta atividade deve conter o projeto Java exportado da aplicação e o
+dump (arquivo .sql) do banco de dados devidamente populado. Além disso, o entregável
+deverá conter um vídeo (áudio + imagem) explicativo apresentando o funcionamento da
+aplicação, demonstre as funcionalidades do CRUD completo no vídeo. Grave a explicação
+de cada um dos itens solicitados como se estive explicando para um novo desenvolvedor da
+equipe recém-chegado na empresa. Dica para a gravação de vídeo: se utilizar o Windows
+10 ou 11, nativamente use o atalho das teclas “wiki + G” para abrir a ferramenta de gravação
+do Windows, mas outros aplicativos de gravação de tela podem ser utilizados.
+
+** Atividade individual.
+3.1 Etapas
+Implementação:
+I. Classe Contato com os seguintes atributos:
+• Nome: String
+• Telefone: String
+• Email: String
+ 
+4
+II. Classe AgendaTelefonica – faz o gerenciamento dos contatos. Ter os seguintes
+métodos:
+• adicionarContato(Contato contato): adiciona um novo contato à agenda.
+• removerContato(String nome): remove um contato da agenda.
+• buscarContato(String nome): busca e retorna um contato da agenda.
+• listarContatos(): lista todos os contatos armazenados na agenda.
+
+III. Classe Principal (AgendaTeste) com um método main que permite ao usuário
+interagir com a agenda telefônica através de um menu simples. O menu deve
+oferecer as seguintes opções:
+1. Adicionar um novo contato.
+2. Remover um contato existente.
+3. Buscar um contato pelo nome.
+4. Listar todos os contatos.
+5. Sair do programa.
+4 CRONOGRAMA
+SEMANA ATIVIDADE PREVISTA
+(Estudos das Unidades e Materiais Complementares)
+1ª
+Apresentação da disciplina, do curso, método avaliativo e o plano de
+ensino.
+2ª
+UA: Análise e modelagem de requisitos de um cenário real
+Desenvolvimento do Projeto Integrador.
+3ª
+UA: Aplicação do diagrama de casos de uso
+Desenvolvimento do Projeto Integrador.
+Aula síncrona (25/04/2026 – 10h00 às 11h00).
+4ª
+UA: Projeto de BD: criando BD
+Desenvolvimento do Projeto Integrador.
+5 ª
+UAs: Projeto de BD: criando BD e Linguagem SQL: comandos de
+linguagem de manipulação
+Desenvolvimento do Projeto Integrador.
+Aula síncrona (23/05/2026 – 10h00 às 11h00).
+6ª
+UAs: Relações étnico-raciais, ensino de História e Culturas Afrobrasileira,
+Africana e Indígena.
+Desenvolvimento do Projeto Integrador. 
+5
+7ª
+Desenvolvimento do Projeto Integrador.
+UA: Culturas afro-brasileira e indígena na sociedade brasileira
+contemporânea
+Ajustes finais do Projeto Integrador.
+Aula síncrona (13/06/2026 – 10h00 às 11h00).
+8ª
+Desenvolvimento do Projeto Integrador.
+Apresentação do Projeto Integrador - Web Conferência
+Entrega do Projeto Integrador - 16/06/2026 -Até às 23:30h.
+9ª Encerramento das UAs (16/06)
+10ª Finalização da disciplina
+5 CRITÉRIOS PARA A AVALIAÇÃO
+• Implemente tratamento de exceções para lidar com casos como contatos inexistentes ou
+operações inválidas.
+• Ofereça uma interface amigável ao usuário para facilitar a interação com a agenda
+telefônica.
+• Teste o programa cuidadosamente para garantir que todas as funcionalidades estejam
+corretamente implementadas e funcionando conforme o esperado.
+6 SUGESTÕES BIBLIOGRÁFICAS
+DATE, C. J. Introdução a Sistemas de Bancos de Dados. 8. ed. São Paulo: Pearson, 2019.
+GONÇALVES, Rafael. Desenvolvimento de Aplicações CRUD em Java com MySQL e
+PostgreSQL. Revista de Tecnologia da Informação, São Paulo, v. 15, n. 2, p. 45-58, 2021.
+MOREIRA, João Pedro; CARVALHO, Lucas. Java e JDBC: Conectando Aplicações
+Java a Bancos de Dados Relacionais. Revista de Computação e Informática, Porto Alegre,
+v. 12, n. 3, p. 33-47, 2022.
+SCHILDT, Herbert. Java: A referência completa. 11. ed. Porto Alegre: AMGH Editora,
+2019.
+SIERRA, Kathy; BATES, Bert. Use a cabeça! Java. 2. ed. Rio de Janeiro: Alta Books,
+2015. 
+6
+SILVA, Alex Vieira da. Banco de dados MySQL e PostgreSQL: desenvolvimento de
+aplicações práticas. 2. ed. São Paulo: Novatec, 2018.
+ 
